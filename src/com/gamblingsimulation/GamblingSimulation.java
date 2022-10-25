@@ -4,6 +4,7 @@ public class GamblingSimulation {
     static int stake = 100;
     static int bet = 1;
     static int betNumber=0;
+    static int totalWinAmount=0;
     public static void winLoss()
     {
         Random random=new Random();
@@ -41,11 +42,32 @@ public class GamblingSimulation {
         return stake;
     }
 
+    public static int winLostAmount()
+    {
+        for(int day=0;day<=20;day++) {
+
+            while (stake != 50 && stake != 150) {
+                Random random = new Random();
+                int random_value = random.nextInt(2);
+                if (random_value == 0) {
+                    stake = stake - bet;
+                } else
+                    stake = stake + bet;
+            }
+            int dayWinAmount = stake - 100;
+            System.out.println("Amount won for day " +day+1+ dayWinAmount);
+            totalWinAmount = totalWinAmount + dayWinAmount;
+        }
+        return totalWinAmount;
+    }
+
+
     public static void main(String[] args) {
         System.out.println("welcome to Gambling Simulation Problem");
         System.out.println("Gambler every day stake is " + stake + "and bet is " + bet);
         winLoss();
         resignDay();
+        winLostAmount();
     }
 }
 
