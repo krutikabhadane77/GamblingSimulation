@@ -1,13 +1,18 @@
 package com.gamblingsimulation;
+import java.util.Arrays;
 import java.util.Random;
+import java.util.OptionalInt;
 public class GamblingSimulation {
     static int stake = 100;
     static int bet = 1;
     static int betNumber = 0;
     static int totalWinAmount = 0;
     static int monthWinAmount = 0;
-    static int[] monthsDay = new int[12];
-    static String[] monthsName = new String[12];
+    static int[] monthsDay = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    static String[] monthsName = {"Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    static int dayInMonth=31;
+    static int luckiest=0;
+    static int unluckiest=0;
 
     public static void winLoss() {
         Random random = new Random();
@@ -60,49 +65,93 @@ public class GamblingSimulation {
 
     public static void monthDaysWonLost()
     {
-
-        for (int i = 0; i >= monthsDay.length; i++) {
-            int m = 0;
+        for (int i = 0; i < monthsDay.length; i++)
+        {
             int monthWinDays = 0;
             int monthLossDays = 0;
-            for (int day = 0; day >= monthsDay[i]; day++) {
-                while (stake != 50 && stake != 150) {
+            System.out.println();
+            for (int day = 1; day <= monthsDay[i]; day++)
+            {
+               while (stake != 50 && stake != 150)
+                {
                     Random random = new Random();
                     int random_value = random.nextInt(2);
-                    if (random_value == 0) {
+                    if (random_value == 0)
+                    {
                         stake = stake - bet;
-                    } else
+                    }
+                    else
                         stake = stake + bet;
                 }
-
                 int dayWinAmount = stake - 100;
-                System.out.println("Amount won for day " + day + 1 + dayWinAmount);
+
+
                 if (dayWinAmount < 0)
+                {
                     monthLossDays = monthLossDays + 1;
+                    System.out.println("Amount lost for day " + day + " of " + monthsName[i] + " : " + dayWinAmount);
+                }
                 else
+                {
                     monthWinDays = monthWinDays + 1;
+                    System.out.println("Amount won for day " + day+" of "+monthsName[i]+" : " + dayWinAmount);
+                }
 
                 monthWinAmount = monthWinAmount + dayWinAmount;
             }
 
-            System.out.println("For " + monthsName[i] + " Total win days is: " + monthWinDays + "and Total loss days is: " + monthLossDays);
-            int diffrence = monthWinDays - monthLossDays;
-            System.out.println("The difference between the no. of days won and lost is: " + diffrence);
+            System.out.println("For " + monthsName[i] + " Total win days is: " + monthWinDays + " and Total loss days is: " + monthLossDays);
+            int difference = monthWinDays - monthLossDays;
+            System.out.println("The difference between the no. of days won and lost is: " + difference);
             System.out.println("For " + monthsName[i] + " Total win amount is: " + monthWinAmount);
 
         }
+
     }
 
-        public static void main (String[] args) {
+    public static void luckiestUnluckiestDay() {
+        int luckyDayAmt=0;
+        int unluckyDayAmt=0;
+        for (int day = 1; day < dayInMonth; day++) {
+            int dailyWonLostAmt=0;
+            int betsPlayed = 0;
+            while ((dailyWonLostAmt < 50) && (dailyWonLostAmt >-50) && (betsPlayed < 100)) {
+                Random random = new Random();
+                betsPlayed++;
+                int random_value = random.nextInt(2);
+                if (random_value == 0) {
+                    dailyWonLostAmt = dailyWonLostAmt - bet;
+                }
+                else {
+                    dailyWonLostAmt = dailyWonLostAmt + bet;
+                }
+            }
+
+            if (luckyDayAmt < dailyWonLostAmt) {
+                luckyDayAmt=dailyWonLostAmt;
+                luckiest=day;
+            }
+
+            if (unluckyDayAmt > dailyWonLostAmt)
+            {
+                unluckyDayAmt=dailyWonLostAmt;
+                unluckiest=day;
+            }
+
+        }
+        System.out.println("The gambler luckiest day is "+ luckiest + " day, and won amount is "+luckyDayAmt);
+        System.out.println("The gambler luckiest day is "+ unluckiest + " day, and won amount is "+unluckyDayAmt);
+
+    }
+
+    public static void main (String[] args) {
         System.out.println("welcome to Gambling Simulation Problem");
         System.out.println("Gambler every day stake is " + stake + "and bet is " + bet);
         winLoss();
         resignDay();
         winLostAmount();
         monthDaysWonLost();
-        int[] monthsDay={31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-        String[] monthsName={"Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        luckiestUnluckiestDay();
     }
-
 }
 
